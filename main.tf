@@ -6,11 +6,11 @@ resource "azurerm_kubernetes_cluster" "main" {
   name                = "boutiqueaks"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
-  dns_prefix          = "boutiqueaks"
+  dns_prefix          = "boutiqueaks-dns"
 
   default_node_pool {
     name       = "default"
-    node_count = 1
+    node_count = 3
     vm_size    = "Standard_D2_v2"
   }
 
@@ -22,17 +22,6 @@ resource "azurerm_kubernetes_cluster" "main" {
     Environment = "Production"
   }
 }
-
-output "client_certificate" {
-  value = azurerm_kubernetes_cluster.main.kube_config.0.client_certificate
-}
-
-output "kube_config" {
-  value = azurerm_kubernetes_cluster.main.kube_config_raw
-
-  sensitive = true
-}
-
 
 resource "azurerm_container_registry" "acr" {
   name                = "boutiqueaksacr"
