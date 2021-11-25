@@ -57,7 +57,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     location                     = "centralus"
     resource_group_name          = "mario-robles"
     allocation_method            = "Dynamic"
-
+    domain_name_label            = "vault"
 }
 
 # Create Network Security Group and rule

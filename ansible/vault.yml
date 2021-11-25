@@ -17,5 +17,35 @@
   - name: Unarchive a file that needs to be downloaded (added in 2.0)
     ansible.builtin.unarchive:
       src: https://releases.hashicorp.com/vault/1.9.0/vault_1.9.0_linux_amd64.zip
-      dest: /usr/local/bin
+      dest: /usr/bin
       remote_src: yes
+
+  - name: Create vault config directory
+    file: state=directory path=/etc/opt/vault/
+    become: true
+
+  - name: Copy vault config to server
+    copy: src=vaultconfig.hcl dest=/etc/opt/vault/
+    become: true
+
+  - name: Copy vault service to server
+    copy: src=vault.service dest=/etc/systemd/system/vault.service
+    become: true
+
+  - name: Start vault service
+    systemd:
+      state: started
+      name: vault
+      daemon_reload: yes
+    become: true
+
+  - pause:
+      seconds: 15
+
+  - name: Initialize the vault
+    command: vault operator init
+    register: keys
+    environment:
+      VAULT_ADDR: "http://127.0.0.1:8200"
+
+  - debug: msg="{{ keys }}"
