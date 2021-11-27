@@ -14,7 +14,12 @@
       name: unzip
       state: present
 
-  - name: Unarchive a file that needs to be downloaded (added in 2.0)
+  - name: Installing jq
+    apt:
+      name: jq
+      state: present
+
+  - name: Installing Vault
     ansible.builtin.unarchive:
       src: https://releases.hashicorp.com/vault/1.9.0/vault_1.9.0_linux_amd64.zip
       dest: /usr/bin
@@ -46,6 +51,6 @@
     command: vault operator init
     register: keys
     environment:
-      VAULT_ADDR: "http://127.0.0.1:8200"
+      VAULT_ADDR: "http://0.0.0.0:8200"
 
   - debug: msg="{{ keys }}"
