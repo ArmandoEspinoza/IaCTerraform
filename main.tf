@@ -2,7 +2,6 @@ data "azurerm_resource_group" "main" {
   name = "mario-robles"
 }
 
-
 resource "azurerm_kubernetes_cluster" "main" {
   name                = "boutiqueaks"
   location            = data.azurerm_resource_group.main.location
@@ -32,10 +31,6 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = false
 }
 
-
-
-
-# Create virtual network
 resource "azurerm_virtual_network" "myterraformnetwork" {
     name                = "myVnet"
     address_space       = ["10.0.0.0/16"]
@@ -51,7 +46,6 @@ resource "azurerm_subnet" "myterraformsubnet" {
     address_prefixes       = ["10.0.1.0/24"]
 }
 
-# Create public IPs
 resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = "centralus"
@@ -60,7 +54,6 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     domain_name_label            = "vault"
 }
 
-# Create Network Security Group and rule
 resource "azurerm_network_security_group" "myterraformnsg" {
     name                = "myNetworkSecurityGroup"
     location            = "centralus"
@@ -91,7 +84,6 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 
 }
 
-# Create network interface
 resource "azurerm_network_interface" "myterraformnic" {
     name                      = "mynic"
     location                  = "centralus"
@@ -106,7 +98,6 @@ resource "azurerm_network_interface" "myterraformnic" {
 
 }
 
-# Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "example" {
     network_interface_id      = azurerm_network_interface.myterraformnic.id
     network_security_group_id = azurerm_network_security_group.myterraformnsg.id
@@ -119,7 +110,6 @@ resource "azurerm_ssh_public_key" "example" {
   public_key          = file("~/.ssh/id_rsa.pub")
 }
 
-# Create virtual machine
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
     name                  = "myVM"
     location              = "centralus"
